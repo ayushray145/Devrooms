@@ -13,7 +13,6 @@ const sampleUsers = [
   { displayName: 'Sofia', email: 'sofia@example.com' },
   { displayName: 'Liam', email: 'liam@example.com' },
   { displayName: 'Ethan', email: 'ethan@example.com' },
-  { displayName: 'Mia', email: 'mia@example.com' },
   { displayName: 'Olivia', email: 'olivia@example.com' },
 
 ];
