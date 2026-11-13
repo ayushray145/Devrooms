@@ -30,7 +30,13 @@ The frontend uses Clerk for authentication. For local dev:
 
 ## Vercel
 This repo builds the frontend from `frontend/` and serves the Express backend
-through a Vercel Function at `/api/*`.
+through a Vercel Function at `/api/handler`, with `/api/*` requests rewritten
+to it before the frontend SPA fallback.
+
+In Vercel **Project Settings → Build and Deployment**, set **Root Directory**
+to the repository root (clear `frontend` if it is selected). The root contains
+`vercel.json` and `api/handler.js`; selecting `frontend/` excludes the API
+function and causes `/api/*` requests to fall through to the frontend page.
 
 Set these environment variables in Vercel for **Production**, and for Preview
 if you use preview deployments:
