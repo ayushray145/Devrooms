@@ -513,7 +513,10 @@ app.post('/api/communities', async (req, res) => {
     return res.status(201).json({ ok: true, community: serialized });
   } catch (error) {
     console.error('Create community failed', error);
-    return res.status(500).json({ ok: false, error: 'Create community failed' });
+    return res.status(500).json({
+      ok: false,
+      error: getPublicMongoErrorMessage(error, 'Create community failed'),
+    });
   }
 });
 
