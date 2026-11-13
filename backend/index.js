@@ -408,12 +408,29 @@ async function generateMiaReply({ prompt, timeoutMs = 12000 }) {
   }
 }
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    ok: true,
+app.get('/api/health', async (req, res) => {
+  const checkMongo = String(req.query?.checkMongo || '').toLowerCase() === 'true';
+  let mongoError = '';
+
+  if (checkMongo) {
+    if (!process.env.MONGODB_URI) {
+      mongoError = 'MongoDB not configured';
+    } else {
+      try {
+        await connectToMongo();
+      } catch (error) {
+        console.error('MongoDB health check failed', error);
+        mongoError = getPublicMongoErrorMessage(error, 'MongoDB connection failed');
+      }
+    }
+  }
+
+  res.status(mongoError ? 503 : 200).json({
+    ok: !mongoError,
     time: new Date().toISOString(),
     pusherConfigured,
     mongo: getMongoStatus(),
+    ...(checkMongo ? { mongoCheckOk: !mongoError, ...(mongoError ? { mongoError } : {}) } : {}),
     geminiConfigured: Boolean(GEMINI_API_KEY),
     geminiModelRequested: GEMINI_MODEL || null,
     geminiModelResolved: resolvedGeminiTarget?.modelName || null,
