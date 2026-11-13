@@ -29,12 +29,19 @@ The frontend uses Clerk for authentication. For local dev:
 3. Restart the Vite dev server after changing env vars.
 
 ## Vercel
-This repo is currently configured to build the frontend from `frontend/`.
+This repo builds the frontend from `frontend/` and serves the Express backend
+through a Vercel Function at `/api/*`.
 
-Set these environment variables in Vercel for the backend/API deployment you connect it to:
-- `MONGODB_URI` (optional, enables chat persistence)
+Set these environment variables in Vercel for **Production**, and for Preview
+if you use preview deployments:
+- `MONGODB_URI` (required for community creation and persistence)
+- `MONGODB_DB` (optional; defaults to the database in the connection string)
 - `PUSHER_APP_ID`
 - `PUSHER_KEY`
 - `PUSHER_SECRET`
 - `PUSHER_CLUSTER`
-- `ALLOWED_ORIGIN` (optional)
+- `GEMINI_API_KEY` (optional; enables the chat assistant)
+
+After adding or changing environment variables, redeploy the project. The
+frontend and API share the same origin, so browser requests continue to use
+relative `/api/...` URLs.
